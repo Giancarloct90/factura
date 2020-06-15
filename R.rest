@@ -1,0 +1,17 @@
+POST http://localhost:3000/productos
+Content-Type: application/json
+
+{
+    "nombre":"Jack",
+    "id":"44"
+}
+###
+
+POST http://localhost:3000/inventario
+Content-Type: application/json
+
+{
+    "id":"5ee6d44bb90e8c6006473806",
+    "cantidad2":"12"
+}
+###

@@ -1,0 +1,46 @@
+/* TITLE */
+.divTitle {
+    margin-top: 20px;
+}
+
+.txtTitle {
+    font-size: 40px;
+    font-weight: bolder;
+    color: #E6E2AF;
+}
+
+/* PRODUCT FORM */
+.divProductosForm {
+    width: 100%;
+    height: auto;
+    background-color: #EFECCA;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+}
+
+/* TABLES PRODUCT */
+.divTableProduct {
+    padding: 20px;
+    margin: 10px;
+    width: 100%;
+    height: auto;
+    background-color: #EFECCA;
+    border-radius: 10px;
+}
+
+/* LBL NOTIFY FORM NOTIFY  */
+/************************************************* */
+.lblNotify {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 2s, opacity 0.9s;
+    /* transition: cubic-bezier(0.455, 0.03, 0.515, 0.955); */
+}
+
+.showNotidy {
+    visibility: visible;
+    opacity: 1;
+}
+
+/************************************************* */
