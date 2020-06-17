@@ -18,6 +18,10 @@ let productos = new Schema({
     disponilbe: {
         type: Boolean,
         required: [true, 'Campo necesario']
+    },
+    cantidad: {
+        type: Number,
+        required: [true, 'La cantidad es necesaria']
     }
 });
 

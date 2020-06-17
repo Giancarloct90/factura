@@ -21,18 +21,9 @@ router.post('/productos', async (req, res) => {
         product.descripcion = descripcion;
         product.precio = precio;
         product.disponilbe = true;
+        product.cantidad = 0;
         let productDB = await product.save();
         if (!product) {
-            res.status(500).json({
-                ok: false,
-                message: 'Erro Server'
-            });
-        }
-        const cantidadProducts = new Inventario();
-        cantidadProducts.productId = productDB._id;
-        cantidadProducts.cantidad = 0
-        let cantidadProductsDB = await cantidadProducts.save();
-        if (!cantidadProductsDB) {
             res.status(500).json({
                 ok: false,
                 message: 'Erro Server'
@@ -42,9 +33,7 @@ router.post('/productos', async (req, res) => {
             ok: true,
             message: 'product saved!!',
             productDB,
-            cantidadProductsDB
         });
-
     } catch (e) {
         res.status(400).json({
             ok: false,

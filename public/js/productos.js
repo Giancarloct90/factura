@@ -5,14 +5,63 @@ const txtPrecioUni = document.getElementById('txtPrecioUni');
 const btnGuardarProducto = document.getElementById('btnGuardarProducto');
 const lblNotify = document.getElementById('lblNotify');
 const divTable = document.getElementById('divTable');
+const btnGuardarInventario = document.getElementById('btnGuardarInventario');
+const cbxProducto = document.getElementById('cbxProducto');
+const txtCantidad = document.getElementById('txtCantidad');
+const txtNuevaCantidad = document.getElementById('txtNuevaCantidad');
+const formInv = document.getElementById('formInv');
+var arrayProducts;
 
-// TRIGGER SOMES FUNCTIONS
-renderizarProducts();
+
 
 // EVENT LISTENER
+document.addEventListener('DOMContentLoaded', main);
 btnGuardarProducto.addEventListener('click', saveProduct);
+btnGuardarInventario.addEventListener('click', async function saveInventario(element) {
+    element.preventDefault();
+    let opt = cbxProducto.options[cbxProducto.selectedIndex];
+    // console.log('value', opt.value);
+    // console.log('text', opt.text);
+    if (opt.value && opt.text && txtCantidad.value && txtNuevaCantidad.value) {
+        // let final = parseFloat(txtCantidad.value) + parseFloat(txtNuevaCantidad.value);
+        // console.log(final);
+        let data = {
+            productId: opt.value,
+            cantidad: parseFloat(txtCantidad.value) + parseFloat(txtNuevaCantidad.value)
+        }
+        try {
+            let info = await fetch('/inventario', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            let info2 = await info.json();
+            if (info2.ok) {
+                formInv.reset();
+                console.log(info2);
+            }
+        } catch (e) {
+            console.log('Error trying to insert invetorio to db');
+        }
+    } else {
+        lblNotify.style.color = 'red';
+        lblNotify.innerHTML = 'Todos los campos son obligatorios';
+        lblNotify.classList.add('showNotidy');
+    }
+
+});
+cbxProducto.addEventListener('change', setCantidad);
 
 // FUNTIONS
+// INIT
+async function main() {
+    await renderizarProducts();
+    fillCbxProducts();
+}
+
+// TO INSERT DATA INTO DB
 async function saveProduct() {
     if (txtNombre.value && txtDescripcion.value && txtPrecioUni.value) {
         lblNotify.classList.remove('showNotidy');
@@ -32,7 +81,11 @@ async function saveProduct() {
             let products = await info.json();
             if (products.ok) {
                 console.log(products);
-                renderizarProducts();
+                await renderizarProducts();
+                fillCbxProducts();
+                txtNombre.value = '';
+                txtDescripcion.value = '';
+                txtPrecioUni.value = '';
             } else {
                 throw new Error;
             }
@@ -53,6 +106,7 @@ async function renderizarProducts() {
         let info = await fetch('/products');
         let data = await info.json();
         if (data.ok) {
+            arrayProducts = data.productDB;
             let products = data.productDB;
             let html = '';
             html += `<table class="table" id="tableProducts">`;
@@ -108,4 +162,38 @@ async function deleteProduct(element) {
     } catch (e) {
         console.log('Error trying to delete a product');
     }
+}
+
+// TO FILL CBX PRODUCTS
+async function fillCbxProducts() {
+    try {
+        let html = '';
+        html += `<option value="" disabled selected>Seleccione un producto</option>`;
+        arrayProducts.map((product) => {
+            html += `<option value="${product._id}">${product.nombre}</option>`;
+        });
+        cbxProducto.innerHTML = html;
+    } catch (e) {
+        console.log('Error trying to get all products', e);
+    }
+}
+
+// TO SET CANTIDAD
+async function setCantidad() {
+    let opt = cbxProducto.options[cbxProducto.selectedIndex];
+    let cantidad = arrayProducts.filter(products => products._id == opt.value)[0].cantidad;
+    txtCantidad.value = cantidad;
+    // try {
+    //     let info = await fetch('/getCantidad', {
+    //         method: 'POST',
+    //         body: JSON.stringify(data),
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     });
+    //     let data2 = await info.json();
+    //     // console.log(data2.cantidadProduct.cantidad);
+    // } catch (e) {
+    //     console.log('Trying to set cantidad', e);
+    // }
 }

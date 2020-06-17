@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="css/productos.css">
 <script defer src="js/productos.js"></script>
 
-<div class="container">
+<div class="container-fluid">
 
     <!-- TITTLE -->
     <div class="row">
@@ -17,12 +17,12 @@
 
     <!-- CONTENT -->
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="divProductosForm">
                 <!-- TITLE FORM -->
-                <h3>Nuevo Producto</h3>
+                <h4>Nuevo Producto</h4>
                 <!-- FORM -->
-                <input type="text" placeholder="Nombre" class="form-control mb-3" id="txtNombre" autocapitalize="off">
+                <input type="text" placeholder="Nombre" class="form-control mb-3" id="txtNombre" autocomplete="off">
                 <textarea id="txtDescripcion" cols="30" rows="3" class="form-control mb-3"
                     placeholder="Descripcion..."></textarea>
                 <input id="txtPrecioUni" type="number" placeholder="Precio Unitario (Lempiras)"
@@ -31,19 +31,43 @@
                 <button id="btnGuardarProducto" class="btn btn-success form-control">Guardar</button>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="container-fluid">
-    <br>
-    <div class="row">
-        <div class="col-12">
-            <div class="divTableProduct">
-                <!-- TITTLE TABLE -->
-                <h3>Productos</h3>
-                <!-- TABLE PRODUCT -->
-                <div id="divTable">
-                    <!-- <table class="tableProducts" id="tableProducts">
+        <div class="col-6">
+            <div class="divProductosForm">
+                <!-- TITLE FORM -->
+                <h4>Inventario</h4>
+                <!-- FORM -->
+                <form action="" id="formInv">
+                    <select name="" id="cbxProducto" class="form-control mb-3">
+                        <option value="" disabled selected>Seleccione un producto</option>
+                        <!-- <option value="jm">Jamaica</option>
+                        <option value="mx">Mexico</option>
+                        <option value="hn">Honduras</option>
+                        <option value="ch">China</option> -->
+                    </select>
+                    <input type="text" class="form-control mb-3" id="txtCantidad" disabled>
+                    <input type="number" class="form-control mb-3" id="txtNuevaCantidad" placeholder="Catindad">
+                    <!-- <textarea id="txtDescripcion" cols="30" rows="3" class="form-control mb-3"
+                        placeholder="Descripcion..."></textarea>
+                        <input id="txtPrecioUni" type="number" placeholder="Precio Unitario (Lempiras)"
+                        class="form-control mb-3"> -->
+                    <label class="lblNotify" id="lblNotify"></label>
+                    <button id="btnGuardarInventario" class="btn btn-success form-control">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <br>
+        <div class="row">
+            <div class="col-12">
+                <div class="divTableProduct">
+                    <!-- TITTLE TABLE -->
+                    <h3>Productos</h3>
+                    <!-- TABLE PRODUCT -->
+                    <div id="divTable">
+                        <!-- <table class="tableProducts" id="tableProducts">
                         <thead>
                             <tr>
                                 <th scope="col">Nombre</th>
@@ -62,7 +86,7 @@
                     </table>
                 </div> -->
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
