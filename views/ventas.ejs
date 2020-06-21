@@ -1,0 +1,93 @@
+<!-- IMPORT MASTER PAGE -->
+<% layout('layout/main') %>
+
+<link rel="stylesheet" href="css/ventas.css">
+<script defer src="js/ventas.js"></script>
+
+<div class="container">
+
+    <!-- TITTLE -->
+    <div class="row">
+        <div class="col-12">
+            <div class="divTitle text-center">
+                <span class="txtTitle">Ventas</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="divVentas">
+
+        <!-- DATOS GENERALES -->
+        <h4 class="mb-3">Nueva Venta</h4>
+        <h5 class="mb-3">Datos Generales</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" id="txtNombreCliente" placeholder="Nombre del cliente" class="form-control mb-3">
+                <input type="text" id="txtFecha" disabled="disabled" class="form-control mb-3">
+            </div>
+            <div class="col-md-6">
+                <input type="Number" id="txtRTN" placeholder="RTN" class="form-control mb-3">
+            </div>
+        </div>
+        <button class="btn btn-danger form-control mb-4">GENERAR FACTURA</button>
+        <hr style="border: 1.5px solid black;">
+
+        <!-- DETALLES DE FACTURA -->
+        <h5 class="mb-3">Productos</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="cbxProducts">Productos</label>
+                <select name="" id="cbxProducts" class="form-control mb-3">
+
+                </select>
+                <label for="txtPrecioUni">Precio Unitario</label>
+                <input type="text" id="txtPrecioUni" class="form-control" disabled="disabled">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="txtStock">Stock</label>
+                <input type="text" id="txtStock" class="form-control mb-3" disabled="disabled">
+                <label for="txtCantidad">Cantidad</label>
+                <input type="Number" id="txtCantidad" class="form-control" placeholder="Cantidad">
+            </div>
+        </div>
+        <label style="color: red; display: none;" id="lblNoty" for="">Todos los campos son necesarios</label>
+        <button id="btnAddProduct" class="btn btn-success form-control mb-4">Agregar Productos</button>
+
+        <!-- DETALLE DE FACTURA -->
+        <h5 class="mb-3">Detalles Factura</h5>
+
+        <table class="table" id="tableProducts">
+            <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Nombre Producto</th>
+                    <th scope="col">Precio Unitario</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">total</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbDetalle">
+                <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Coca cola</td>
+                    <td>45</td>
+                    <td>2</td>
+                    <td>90</td>
+                    <td>X</td>
+                </tr> -->
+            </tbody>
+            <tbody id="tbTotales">
+                <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Coca cola</td>
+                    <td>45</td>
+                    <td>2</td>
+                    <td>90</td>
+                    <td>X</td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
+
+</div>

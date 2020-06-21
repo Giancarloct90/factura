@@ -100,4 +100,39 @@ router.post('/deleteProducts', async (req, res) => {
     }
 });
 
+// TO SET NEW CANTIDAD A PRODUCT
+router.post('/newStock', async (req, res) => {
+    let {
+        productId,
+        cantidad
+    } = req.body
+    try {
+        let newStockDB = await Productos.findOneAndUpdate({
+            _id: productId
+        }, {
+            cantidad: cantidad
+        }, {
+            new: true,
+            upsert: true
+        });
+        if (!newStockDB) {
+            res.status(500).json({
+                ok: false,
+                message: 'Server Error'
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            message: 'success',
+            newStockDB: newStockDB
+        });
+    } catch (e) {
+        res.status(400).json({
+            ok: false,
+            message: 'Error'
+        });
+        console.log('Error tratando de meter un newStock', e);
+    }
+});
+
 module.exports = router;

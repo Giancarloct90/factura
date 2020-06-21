@@ -9,7 +9,7 @@ const btnGuardarInventario = document.getElementById('btnGuardarInventario');
 const cbxProducto = document.getElementById('cbxProducto');
 const txtCantidad = document.getElementById('txtCantidad');
 const txtNuevaCantidad = document.getElementById('txtNuevaCantidad');
-const formInv = document.getElementById('formInv');
+// const formInv = document.getElementById('formInv');
 var arrayProducts;
 
 
@@ -17,8 +17,18 @@ var arrayProducts;
 // EVENT LISTENER
 document.addEventListener('DOMContentLoaded', main);
 btnGuardarProducto.addEventListener('click', saveProduct);
-btnGuardarInventario.addEventListener('click', async function saveInventario(element) {
-    element.preventDefault();
+btnGuardarInventario.addEventListener('click', saveInventario);
+cbxProducto.addEventListener('change', setCantidad);
+
+// FUNTIONS
+// INIT
+async function main() {
+    await renderizarProducts();
+    fillCbxProducts();
+}
+
+// TO INSERT A NEW STOCK
+async function saveInventario() {
     let opt = cbxProducto.options[cbxProducto.selectedIndex];
     // console.log('value', opt.value);
     // console.log('text', opt.text);
@@ -30,7 +40,7 @@ btnGuardarInventario.addEventListener('click', async function saveInventario(ele
             cantidad: parseFloat(txtCantidad.value) + parseFloat(txtNuevaCantidad.value)
         }
         try {
-            let info = await fetch('/inventario', {
+            let info = await fetch('/newStock', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
@@ -39,7 +49,9 @@ btnGuardarInventario.addEventListener('click', async function saveInventario(ele
             });
             let info2 = await info.json();
             if (info2.ok) {
-                formInv.reset();
+                await renderizarProducts();
+                txtCantidad.value = '';
+                txtNuevaCantidad.value = '';
                 console.log(info2);
             }
         } catch (e) {
@@ -51,14 +63,6 @@ btnGuardarInventario.addEventListener('click', async function saveInventario(ele
         lblNotify.classList.add('showNotidy');
     }
 
-});
-cbxProducto.addEventListener('change', setCantidad);
-
-// FUNTIONS
-// INIT
-async function main() {
-    await renderizarProducts();
-    fillCbxProducts();
 }
 
 // TO INSERT DATA INTO DB
@@ -114,6 +118,7 @@ async function renderizarProducts() {
             html += `<tr>`;
             html += `<th scope="col">Nombre</th>`;
             html += `<th scope="col">Descripcion</th>`;
+            html += `<th scope="col">Stock</th>`;
             html += `<th scope="col">Precio</th>`;
             html += `<th scope="col">Acciones</th>`;
             html += `</tr>`;
@@ -123,6 +128,7 @@ async function renderizarProducts() {
                 html += `<tr>`;
                 html += `<th>${product.nombre}</th>`;
                 html += `<td>${product.descripcion}</td>`;
+                html += `<td>${product.cantidad}</td>`;
                 html += `<td>${product.precio}</td>`;
                 html += `<td><button class="btn btn-danger" id="${product._id}" onclick="deleteProduct(this)">Borrar</button></td>`;
                 html += `</tr>`;

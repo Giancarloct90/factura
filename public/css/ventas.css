@@ -1,0 +1,17 @@
+.divTitle {
+    margin-top: 20px;
+}
+
+.txtTitle {
+    font-size: 40px;
+    font-weight: bolder;
+    color: #E6E2AF;
+}
+
+.divVentas {
+    background-color: white;
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    padding: 20px;
+}
