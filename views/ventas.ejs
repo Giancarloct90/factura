@@ -29,7 +29,8 @@
                 <input type="Number" id="txtRTN" placeholder="RTN" class="form-control mb-3">
             </div>
         </div>
-        <button class="btn btn-danger form-control mb-4">GENERAR FACTURA</button>
+        <label for="" id="lblNotyFact" class="mb-3" style="display: none;"></label>
+        <button id="btnGenFact" class="btn btn-danger form-control mb-4">GENERAR FACTURA</button>
         <hr style="border: 1.5px solid black;">
 
         <!-- DETALLES DE FACTURA -->
@@ -68,14 +69,7 @@
                 </tr>
             </thead>
             <tbody id="tbDetalle">
-                <!-- <tr>
-                    <th scope="row">1</th>
-                    <td>Coca cola</td>
-                    <td>45</td>
-                    <td>2</td>
-                    <td>90</td>
-                    <td>X</td>
-                </tr> -->
+
             </tbody>
             <tbody id="tbTotales">
                 <!-- <tr>

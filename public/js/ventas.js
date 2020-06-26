@@ -8,7 +8,12 @@ const txtCantidad = document.getElementById('txtCantidad');
 const lblNoty = document.getElementById('lblNoty');
 const tbDetalle = document.getElementById('tbDetalle');
 const tbTotales = document.getElementById('tbTotales');
-let tot = 0,
+const btnGenFact = document.getElementById('btnGenFact');
+const txtNombreCliente = document.getElementById('txtNombreCliente');
+const txtRTN = document.getElementById('txtRTN');
+const lblNotyFact = document.getElementById('lblNotyFact');
+// const txtFecha = document.getElementById('txtFecha');
+let subTotal = 0,
     totalFinal = 0,
     imp = 0,
     No = 0;
@@ -17,6 +22,7 @@ let tot = 0,
 document.addEventListener('DOMContentLoaded', main);
 cbxProducts.addEventListener('change', fillFormProduct);
 btnAddProduct.addEventListener('click', addProducts);
+btnGenFact.addEventListener('click', genFactura);
 
 //FUNCTION
 // MAIN FUNCTION TO INIT PROJECT
@@ -84,7 +90,7 @@ async function getAllProducts() {
 async function fillCbx() {
     try {
         let products = await getAllProducts();
-        console.log(products);
+        // console.log(products);
         let html = '';
         html += `<option value="" disabled selected>Seleccione un producto</option>`;
         products.map(product => {
@@ -115,74 +121,132 @@ async function addProducts() {
     if (cbxProducts.value && txtStock.value && txtPrecioUni.value && txtCantidad.value) {
         lblNoty.style.display = 'none';
         let opt = cbxProducts.options[cbxProducts.selectedIndex];
-        let tr = document.createElement('tr');
-        let tr2 = document.createElement('tr');
-        let tr3 = document.createElement('tr');
-        let tr4 = document.createElement('tr');
+        let rowProduct = document.createElement('tr');
         let html = '';
         No += 1
         // Detalle Producto
-        html += `<tr>`;
-        html += `<th scope="row">${No}</th>`;
+        rowProduct.setAttribute("id", `${opt.value}r`);
+        rowProduct.setAttribute("class", "rowDeatils");
+        html += `<th>${No}</th>`;
         html += `<td>${opt.text}</td>`;
         html += `<td>${txtPrecioUni.value}</td>`;
         html += `<td>${txtCantidad.value}</td>`;
-        tot = parseFloat(tot) + (parseFloat(txtPrecioUni.value) * parseFloat(txtCantidad.value));
-        html += `<td>${parseFloat(txtPrecioUni.value)*parseFloat(txtCantidad.value)}</td>`;
-        html += `<td>X</td>`;
-        html += `</tr>`;
-        tr.innerHTML = html;
-        tbDetalle.appendChild(tr);
+        subTotal = parseFloat(subTotal) + (parseFloat(txtPrecioUni.value) * parseFloat(txtCantidad.value));
+        html += `<td id="${opt.value}t">${parseFloat(txtPrecioUni.value)*parseFloat(txtCantidad.value)}</td>`;
+        html += `<td><i id="${opt.value}" onclick="deleteProduct(this)" class="del fas fa-trash-alt"></i></td>`;
+        rowProduct.innerHTML = html;
+        tbDetalle.appendChild(rowProduct);
 
+        genSubTotal(subTotal, false);
 
-        html = '';
-        tbTotales.innerHTML = '';
-
-        // Sub total
-        html += `<tr>`;
-        html += `<th scope="row"></th>`;
-        html += `<td></td>`;
-        html += `<td></td>`;
-        html += `<td>Sub-Total</td>`;
-        html += `<td>${tot}</td>`;
-        html += `<td></td>`;
-        html += `</tr>`;
-        tr2.innerHTML = html;
-        tbTotales.appendChild(tr2);
-
-        // IMPUESTO SOBRE LA RENTA
-        html = '';
-        html += `<tr>`;
-        html += `<th scope="row"></th>`;
-        html += `<td></td>`;
-        html += `<td></td>`;
-        html += `<td>ISR(15%)</td>`;
-        imp = (parseFloat(tot) * 0.15);
-        html += `<td>${parseFloat(tot)*0.15}</td>`;
-        html += `<td></td>`;
-        html += `</tr>`;
-        tr3.innerHTML = html;
-        tbTotales.appendChild(tr3);
-
-        //TOTAL A PAGAR
-        html = '';
-        html += `<tr>`;
-        html += `<th scope="row"></th>`;
-        html += `<td></td>`;
-        html += `<td></td>`;
-        html += `<td>Total a Pagar</td>`;
-        html += `<td>${parseFloat(tot)+imp}</td>`;
-        115
-        html += `<td></td>`;
-        html += `</tr>`;
-        tr4.innerHTML = html;
-        tbTotales.appendChild(tr4);
+        // CLEAR FORM
         txtStock.value = '';
         txtPrecioUni.value = '';
         txtCantidad.value = '';
-        console.log(tot);
     } else {
         lblNoty.style.display = '';
         // alert('todos los campos son necesarios');
     }
+}
+
+// TO GENERATE SUNTOTAL DEATILS
+function genSubTotal(total, flag) {
+    if (flag) {
+        total = parseFloat(subTotal) - parseFloat(total);
+        subTotal = total;
+    }
+    let rowSubTotal = document.createElement('tr');
+    let rowImp = document.createElement('tr');
+    let rowTotal = document.createElement('tr');
+    let html = '';
+    tbTotales.innerHTML = '';
+
+    // Sub total
+    html += `<th scope="row"></th>`;
+    html += `<td></td>`;
+    html += `<td></td>`;
+    html += `<td>Sub-Total</td>`;
+    html += `<td id="subTotal">${total}</td>`;
+    html += `<td></td>`;
+    rowSubTotal.innerHTML = html;
+    tbTotales.appendChild(rowSubTotal);
+
+    // IMPUESTO SOBRE LA RENTA
+    html = '';
+    html += `<th scope="row"></th>`;
+    html += `<td></td>`;
+    html += `<td></td>`;
+    html += `<td>ISR(15%)</td>`;
+    imp = (parseFloat(total) * 0.15);
+    html += `<td id="impTxt">${parseFloat(total)*0.15}</td>`;
+    html += `<td></td>`;
+    rowImp.innerHTML = html;
+    tbTotales.appendChild(rowImp);
+
+    //TOTAL A PAGAR
+    html = '';
+    html += `<th scope="row"></th>`;
+    html += `<td></td>`;
+    html += `<td></td>`;
+    html += `<td>Total a Pagar</td>`;
+    html += `<td id="totalTxt">${parseFloat(total)+imp}</td>`;
+    html += `<td></td>`;
+    rowTotal.innerHTML = html;
+    tbTotales.appendChild(rowTotal);
+}
+
+// TO GENERATE FACTURA
+async function genFactura() {
+
+    if (subTotal && imp) {
+        if (txtNombreCliente.value && txtRTN.value) {
+            lblNotyFact.style.display = 'none';
+            let row = tbDetalle.getElementsByClassName("rowDeatils");
+            let arrDetalles = [];
+            let detalles = {};
+            for (let i = 0; i <= (row.length - 1); i++) {
+                detalles = {};
+                for (let ii = 0; ii <= (parseFloat(row[i].getElementsByTagName("td").length) - 2); ii++) {
+                    detalles[ii] = row[i].getElementsByTagName("td")[ii].innerHTML;
+                }
+                arrDetalles.push(detalles);
+            };
+            console.log(arrDetalles);
+            let data = {
+                nombre: txtNombreCliente.value,
+                rtn: txtRTN.value,
+                fecha: txtFecha.value,
+                detalle: arrDetalles,
+                subtot: subTotal,
+                impuesto: imp
+            }
+            let info = await fetch('/factura', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            let info2 = await info.json();
+            console.log(info2);
+        } else {
+            lblNotyFact.style.display = '';
+            lblNotyFact.style.color = 'red';
+            lblNotyFact.innerHTML = 'Nombre y RTN son OBLIGATORIOS!!!'
+        }
+    } else {
+        lblNotyFact.style.display = '';
+        lblNotyFact.style.color = 'red';
+        lblNotyFact.innerHTML = 'La factura no tiene productos, Factura esta vacia'
+    }
+}
+
+// TO DELETE A PRODUCT OF THE LIST
+async function deleteProduct(element) {
+    let row = element.getAttribute('id');
+    let subTotal = document.getElementById(`${row + "t"}`).innerHTML;
+    document.getElementById(`${row + "r"}`).remove();
+    genSubTotal(subTotal, true);
+    // console.log(su);
+    // console.log(row + "r");
 }

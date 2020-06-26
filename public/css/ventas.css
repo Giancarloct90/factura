@@ -14,4 +14,9 @@
     height: auto;
     border-radius: 15px;
     padding: 20px;
+    margin-bottom: 50px;
+}
+
+.del {
+    cursor: pointer;
 }
