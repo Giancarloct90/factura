@@ -12,6 +12,7 @@ const btnGenFact = document.getElementById('btnGenFact');
 const txtNombreCliente = document.getElementById('txtNombreCliente');
 const txtRTN = document.getElementById('txtRTN');
 const lblNotyFact = document.getElementById('lblNotyFact');
+const btnVerFactura = document.getElementById('btnVerFactura');
 // const txtFecha = document.getElementById('txtFecha');
 let subTotal = 0,
     totalFinal = 0,
@@ -211,7 +212,6 @@ async function genFactura() {
                 }
                 arrDetalles.push(detalles);
             };
-            console.log(arrDetalles);
             let data = {
                 nombre: txtNombreCliente.value,
                 rtn: txtRTN.value,
@@ -220,15 +220,24 @@ async function genFactura() {
                 subtot: subTotal,
                 impuesto: imp
             }
-            let info = await fetch('/factura', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
+            try {
+                let info = await fetch('/factura', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                let info2 = await info.json();
+                if (info2.ok) {
+                    console.log(info2);
+                    btnVerFactura.setAttribute("href", `http://localhost:3000/facturasPDF/${info2.pdf}.pdf`);
+                    btnVerFactura.setAttribute("target", "_blank");
+                    btnVerFactura.style.display = '';
                 }
-            });
-            let info2 = await info.json();
-            console.log(info2);
+            } catch (e) {
+                alert('Ocurrio un error');
+            }
         } else {
             lblNotyFact.style.display = '';
             lblNotyFact.style.color = 'red';
@@ -237,7 +246,7 @@ async function genFactura() {
     } else {
         lblNotyFact.style.display = '';
         lblNotyFact.style.color = 'red';
-        lblNotyFact.innerHTML = 'La factura no tiene productos, Factura esta vacia'
+        lblNotyFact.innerHTML = 'La factura no tiene productos, Factura esta vacia';
     }
 }
 
