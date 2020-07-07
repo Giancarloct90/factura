@@ -8,15 +8,11 @@
     color: #E6E2AF;
 }
 
-.divVentas {
+.divFactura {
     background-color: #EFECCA;
     width: 100%;
     height: auto;
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 50px;
-}
-
-.del {
-    cursor: pointer;
 }
